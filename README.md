@@ -1,0 +1,1 @@
+# Ghid_AI_App

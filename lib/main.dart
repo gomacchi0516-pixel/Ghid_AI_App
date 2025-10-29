@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'common/common_scaffold.dart'; // ← 共通UIを別ファイルで定義したやつ
+import 'ai_navigator_page.dart'; // 👈 追加
 
 void main() => runApp(const MyApp());
 
@@ -238,12 +241,13 @@ class _NavButton extends StatelessWidget {
 }
 
 /// 🤖 AI Navigator ページ
-class AiNavigatorPage extends StatelessWidget {
-  const AiNavigatorPage({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const CommonScaffold(child: Text('AI Navigator'));
-}
+// class AiNavigatorPage extends StatelessWidget {
+//   const AiNavigatorPage({super.key});
+//   @override
+//   Widget build(BuildContext context) =>
+//       const CommonScaffold(child: Text('AI Navigator'));
+      
+// }
 
 /// 🧩 Digital Screening ページ
 class DigitalScreeningPage extends StatelessWidget {

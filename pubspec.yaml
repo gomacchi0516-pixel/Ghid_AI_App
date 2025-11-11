@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^2.0.9
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -58,7 +59,23 @@ flutter:
     - assets/images/company_logo.png
     - assets/images/Robot.png
     - assets/images/Head.png
+    - assets/images/phone.svg
+    - assets/images/email.svg
+    - assets/images/pin.svg
 
+    - assets/fonts/ 
+  # --- fonts (フォント) ---
+  # 👇 このセクションを assets と同じ階層に追加します
+  fonts:
+    - family: Montserrat  # これがコード内で使うフォント名です
+      fonts:
+        # 通常の太さ (font-weight: 400)
+        - asset: assets/fonts/Montserrat-Regular.ttf
+          weight: 400
+        # 太字 (font-weight: 700)
+        - asset: assets/fonts/Montserrat-Bold.ttf
+          weight: 700
+        # (もし他の太さも使う場合はここに追加します)
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -93,3 +110,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+  

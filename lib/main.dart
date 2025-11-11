@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'common/common_scaffold.dart'; // ← 共通UIを別ファイルで定義したやつ
 import 'ai_navigator_page.dart'; // 👈 追加
+import 'contact.dart';
+import 'guide.dart';
+import 'digital_screening.dart';
 
 void main() => runApp(const MyApp());
 
@@ -15,6 +18,7 @@ final _router = GoRouter(
     GoRoute(path: '/ai', builder: (_, __) => const AiNavigatorPage()),
     GoRoute(
       path: '/screening',
+      // 👇 ここを新しいページクラスに変更
       builder: (_, __) => const DigitalScreeningPage(),
     ),
     GoRoute(path: '/guide', builder: (_, __) => const GuidePage()),
@@ -32,6 +36,9 @@ class MyApp extends StatelessWidget {
     theme: ThemeData(
       useMaterial3: true,
       colorSchemeSeed: const Color(0xFF4F46E5), // メインカラー
+
+      // 👇 この行を追加します
+      fontFamily: 'Montserrat', // アプリ全体のデフォルトフォントを指定
     ),
   );
 }
@@ -250,25 +257,25 @@ class _NavButton extends StatelessWidget {
 // }
 
 /// 🧩 Digital Screening ページ
-class DigitalScreeningPage extends StatelessWidget {
-  const DigitalScreeningPage({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const CommonScaffold(child: Text('Digital Screening'));
-}
+// class DigitalScreeningPage extends StatelessWidget {
+//   const DigitalScreeningPage({super.key});
+//   @override
+//   Widget build(BuildContext context) =>
+//       const CommonScaffold(child: Text('Digital Screening'));
+// }
 
-/// 📘 Guide ページ
-class GuidePage extends StatelessWidget {
-  const GuidePage({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const CommonScaffold(child: Text('View the Guide'));
-}
+// /// 📘 Guide ページ
+// class GuidePage extends StatelessWidget {
+//   const GuidePage({super.key});
+//   @override
+//   Widget build(BuildContext context) =>
+//       const CommonScaffold(child: Text('View the Guide'));
+// }
 
 /// ✉️ Contact ページ
-class ContactPage extends StatelessWidget {
-  const ContactPage({super.key});
-  @override
-  Widget build(BuildContext context) =>
-      const CommonScaffold(child: Text('Contact Us'));
-}
+// class ContactPage extends StatelessWidget {
+//   const ContactPage({super.key});
+//   @override
+//   Widget build(BuildContext context) =>
+//       const CommonScaffold(child: Text('Contact Us'));
+// }

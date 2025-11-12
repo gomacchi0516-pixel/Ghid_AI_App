@@ -7,6 +7,8 @@ import 'ai_navigator_page.dart'; // 👈 追加
 import 'contact.dart';
 import 'guide.dart';
 import 'digital_screening.dart';
+import 'contact_form.dart';
+import 'contact_complete.dart';
 
 void main() => runApp(const MyApp());
 
@@ -23,6 +25,18 @@ final _router = GoRouter(
     ),
     GoRoute(path: '/guide', builder: (_, __) => const GuidePage()),
     GoRoute(path: '/contact', builder: (_, __) => const ContactPage()),
+    GoRoute(
+      path: '/contact-form',
+      // CommonScaffoldで囲んで表示する
+      builder: (_, __) => const CommonScaffold(
+        scrollable: false, // Stackレイアウトのため
+        child: ContactForm(),
+      ),
+    ),
+    GoRoute(
+      path: '/contact-complete',
+      builder: (_, __) => const ContactCompletePage(),
+    ),
   ],
 );
 

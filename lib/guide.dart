@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'common/common_scaffold.dart'; // 共通Scaffold
 
+
 // CSSで指定されたフォントスタイル
 const TextStyle kGuideTextStyle = TextStyle(
   fontFamily: 'Montserrat', // アプリ全体で設定済なら不要

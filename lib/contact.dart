@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ai_guide_app/common/common_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
+import 'common/common_scaffold.dart';
 
 // --- スタイル定義 (変更なし) ---
 const TextStyle titleStyle = TextStyle(
@@ -94,18 +95,14 @@ class ContactPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // --- E-mail Card (1行表示) ---
+              // --- E-mail Card (レイアウトプロパティを削除) ---
               ContactInfoCard(
                 backgroundColor: const Color(0xFF00AEEF),
                 iconAssetPath: 'assets/images/email.svg',
                 fallbackIcon: Icons.email,
                 title: 'E-mail',
-                content: emailAddress, // 👈 1行で表示される
-                iconTop: 2,
-                titleTop: 15,
-                contentLeft: 80.5,
-                contentTop: 51,
-                contentWidth: 178,
+                content: emailAddress,
+                forceSingleLine: true, // 1行表示を強制
                 onTap: () => _copyToClipboard(context, emailAddress),
               ),
               const SizedBox(height: 50),
@@ -131,35 +128,27 @@ class ContactPage extends StatelessWidget {
               ),
               const SizedBox(height: 50),
 
-              // --- Telefon Card (1行表示) ---
+              // --- Telefon Card (レイアウトプロパティを削除) ---
               ContactInfoCard(
                 backgroundColor: const Color(0xFFCCCC00),
                 iconAssetPath: 'assets/images/phone.svg',
                 fallbackIcon: Icons.phone,
                 title: 'Telefon',
-                content: phoneNumber, // 👈 1行で表示される
-                iconTop: 9,
-                titleTop: 15,
-                contentLeft: 103.5,
-                contentTop: 58,
-                contentWidth: 132,
+                content: phoneNumber,
+                forceSingleLine: true, // 1行表示を強制
                 onTap: () => _launchPhone(phoneNumber),
               ),
               const SizedBox(height: 50),
 
-              // --- Office Card (改行あり) ---
+              // --- Office Card (レイアウトプロパティを削除) ---
               ContactInfoCard(
                 backgroundColor: const Color(0xFFFC9706),
                 iconAssetPath: 'assets/images/pin.svg',
                 fallbackIcon: Icons.location_city,
                 title: 'Office',
-                // 👇 .replaceAll を使ってカンマで改行コード(\n)を挿入
-                content: officeAddress.replaceAll(', ', ',\n'), 
-                iconTop: 6,
-                titleTop: 12,
-                contentLeft: 73.5,
-                contentTop: 55,
-                contentWidth: 191,
+                // .replaceAll で意図的に改行
+                content: officeAddress.replaceAll(', ', ',\n'),
+                // forceSingleLine: false (デフォルト) なので複数行表示される
                 onTap: () => _launchMaps(officeAddress),
               ),
               const SizedBox(height: 50),
@@ -187,21 +176,15 @@ class ContactPage extends StatelessWidget {
   }
 }
 
-/// 連絡先情報カード (1行表示の設定を削除)
+/// 連絡先情報カード (Stack/PositionedをRow/Columnレイアウトに変更)
 class ContactInfoCard extends StatelessWidget {
   final Color backgroundColor;
   final String iconAssetPath;
   final IconData fallbackIcon;
   final String title;
   final String content;
-  final double iconLeft;
-  final double iconTop;
-  final double titleLeft;
-  final double titleTop;
-  final double contentLeft;
-  final double contentTop;
-  final double contentWidth;
   final VoidCallback? onTap;
+  final bool forceSingleLine; // 👈 1行表示/複数行表示の切り替え
 
   const ContactInfoCard({
     super.key,
@@ -210,14 +193,8 @@ class ContactInfoCard extends StatelessWidget {
     required this.fallbackIcon,
     required this.title,
     required this.content,
-    this.iconLeft = 9.5,
-    required this.iconTop,
-    this.titleLeft = 63.5,
-    required this.titleTop,
-    required this.contentLeft,
-    required this.contentTop,
-    required this.contentWidth,
     this.onTap,
+    this.forceSingleLine = false, // 👈 デフォルトはfalse (複数行許可)
   });
 
   @override
@@ -226,42 +203,55 @@ class ContactInfoCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 338,
-        height: 109,
+        // height: 109, // 👈 高さを固定しない
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0), // 👈 内側に余白
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(10),
         ),
         clipBehavior: Clip.none, 
-        child: Stack(
-          clipBehavior: Clip.none, 
+        child: Row( // 👈 StackをRowに変更
+          crossAxisAlignment: CrossAxisAlignment.center, // 👈 アイコンとテキストブロックを中央揃え
           children: [
-            Positioned(
-              left: iconLeft,
-              top: iconTop,
-              child: SvgPicture.asset(
-                iconAssetPath,
-                width: 48,
-                height: 49,
-                colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                placeholderBuilder: (context) => 
-                    Icon(fallbackIcon, size: 48, color: Colors.white),
-              ),
+            // --- Icon ---
+            SvgPicture.asset(
+              iconAssetPath,
+              width: 48,
+              height: 49,
+              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+              placeholderBuilder: (context) => 
+                  Icon(fallbackIcon, size: 48, color: Colors.white),
             ),
-            Positioned(
-              left: titleLeft,
-              top: titleTop,
-              child: Text(title, style: titleStyle, textAlign: TextAlign.center),
-            ),
-            Positioned(
-              left: contentLeft,
-              top: contentTop,
-              width: contentWidth,
-              child: Text(
-                content, 
-                style: contentStyle, 
-                textAlign: TextAlign.center,
-                
-                // 👇 1行表示の設定 (softWrap: false, overflow: visible) を削除
+            const SizedBox(width: 10), // 👈 アイコンとテキストの間のスペース
+
+            // --- Text Block ---
+            Expanded( // 👈 残りの幅をすべてテキストブロックが使う
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // 👈 縦方向は最小限の高さ
+                crossAxisAlignment: CrossAxisAlignment.center, // 👈 テキストを中央揃え
+                children: [
+                  // --- Title ---
+                  Text(
+                    title, 
+                    style: titleStyle, 
+                    textAlign: TextAlign.center
+                  ),
+                  const SizedBox(height: 8), // 👈 タイトルとコンテンツの間のスペース
+
+                  // --- Content ---
+                  Text(
+                    content, 
+                    style: contentStyle, 
+                    textAlign: TextAlign.center,
+                    
+                    // 👇 1行表示/複数行表示の制御
+                    softWrap: !forceSingleLine, // trueなら自動改行 (Office)
+                    overflow: forceSingleLine 
+                                ? TextOverflow.ellipsis // 1行強制ならはみ出たら...
+                                : TextOverflow.clip, // 複数行ならはみ出たら切り取る
+                    maxLines: forceSingleLine ? 1 : null, // 1行強制 or 複数行許可 (null)
+                  ),
+                ],
               ),
             ),
           ],

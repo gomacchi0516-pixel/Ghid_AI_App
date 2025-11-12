@@ -29,7 +29,7 @@ final _router = GoRouter(
       path: '/contact-form',
       // CommonScaffoldで囲んで表示する
       builder: (_, __) => const CommonScaffold(
-        scrollable: false, // Stackレイアウトのため
+        scrollable: true, // Stackレイアウトのため
         child: ContactForm(),
       ),
     ),

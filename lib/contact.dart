@@ -34,16 +34,25 @@ class ContactPage extends StatelessWidget {
 
   // --- 地図アプリ起動用の関数 (変更なし) ---
   Future<void> _launchMaps(String address) async {
+    final String query = Uri.encodeComponent(address);
+    
+    // 👇 Android/iOS共通で試行するGoogle Maps URL (Webとアプリ両対応)
     final Uri googleMapsUrl = Uri.parse(
-      'http://googleusercontent.com/maps/google.com/27${Uri.encodeComponent(address)}'
+      'https://www.google.com/maps/place/ECDL+ROMANIA/@44.446268,26.105071,19z/data=!4m6!3m5!1s0x40b1ff50cc34eb9b:0x6758b14caf668183!8m2!3d44.446166!4d26.105071!16s%2Fg%2F1hc580tfb?hl=en&entry=ttu&g_ep=EgoyMDI1MTEwNS4wIKXMDSoASAFQAw%3D%3D'
     );
+    
+    // 👇 iOS用のApple Maps URL (フォールバック)
     final Uri appleMapsUrl = Uri.parse(
-      'http://googleusercontent.com/maps/google.com/28${Uri.encodeComponent(address)}'
+      'https://www.google.com/maps/place/ECDL+ROMANIA/@44.446268,26.105071,19z/data=!4m6!3m5!1s0x40b1ff50cc34eb9b:0x6758b14caf668183!8m2!3d44.446166!4d26.105071!16s%2Fg%2F1hc580tfb?hl=en&entry=ttu&g_ep=EgoyMDI1MTEwNS4wIKXMDSoASAFQAw%3D%3D'
     );
+
     try {
+      // 最初にGoogle MapsのURLを試す
       if (await canLaunchUrl(googleMapsUrl)) {
         await launchUrl(googleMapsUrl);
-      } else if (await canLaunchUrl(appleMapsUrl)) {
+      } 
+      // もしダメならApple Maps (iOS) を試す
+      else if (await canLaunchUrl(appleMapsUrl)) {
         await launchUrl(appleMapsUrl);
       } else {
         print('Could not launch maps');
